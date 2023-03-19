@@ -1,3 +1,5 @@
+**/partnet-mobility-dataset/*
+**/renders/*
 build
 compile_commands.json
 .vscode
