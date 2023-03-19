@@ -40,8 +40,9 @@ def main():
 
     # ray_tracing = True
     if ray_tracing:
-        sapien.render_config.camera_shader_dir = "rt"
-        sapien.render_config.viewer_shader_dir = "rt"
+        sapien.render_config.camera_shader_dir = "rt-variance"
+        # sapien.render_config.camera_shader_dir = "./rt-variance"
+        sapien.render_config.viewer_shader_dir = "rt-variance"
         sapien.render_config.rt_samples_per_pixel = 256  # change to 256 for less noise
         sapien.render_config.rt_use_denoiser = True  # change to True for OptiX denoiser
 
@@ -50,20 +51,21 @@ def main():
     renderer = sapien.SapienRenderer()
     engine.set_renderer(renderer)
 
-    scene = engine.create_scene()
-    scene.set_timestep(1 / 100.0)
-
-    scene.set_ambient_light([0.5, 0.5, 0.5])
-    scene.add_directional_light([0, 1, -1], [0.5, 0.5, 0.5], shadow=True)
-    scene.add_point_light([1, 2, 2], [1, 1, 1], shadow=True)
-    scene.add_point_light([1, -2, 2], [1, 1, 1], shadow=True)
-    scene.add_point_light([-1, 0, 1], [1, 1, 1], shadow=True)
-
     ids = ['10797', '10905', '10849', '10373', '11260', '12054', '12249', '12252']
-    id = 10373
+    # id = 10373
 
     for id in ids:
-        id = 10373
+
+        scene = engine.create_scene()
+        scene.set_timestep(1 / 100.0)
+
+        scene.set_ambient_light([0.5, 0.5, 0.5])
+        scene.add_directional_light([0, 1, -1], [0.5, 0.5, 0.5], shadow=True)
+        scene.add_point_light([1, 2, 2], [1, 1, 1], shadow=True)
+        scene.add_point_light([1, -2, 2], [1, 1, 1], shadow=True)
+        scene.add_point_light([-1, 0, 1], [1, 1, 1], shadow=True)
+        
+        # id = 10373
         urdf_path = SAPIEN.asset.download_partnet_mobility(id, token)
         loader = scene.create_urdf_loader()
         loader.fix_root_link = True
@@ -179,7 +181,7 @@ def main():
         print("Done with ID", id)
         print("======================================\n\n") 
 
-        scene.remove_node(asset)
+        scene = None
 
 
 if __name__ == '__main__':
